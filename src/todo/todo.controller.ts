@@ -13,6 +13,7 @@ import {
 import { TodoModel, TodoStatusEnum } from './Model/todo.model';
 import { Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import { AddTodoDto } from "./dto/add-todo.dto";
 
 @Controller('todo')
 export class TodoController {
@@ -43,7 +44,7 @@ export class TodoController {
   // }
   @Post()
   // @HttpCode(200)
-  addTodo(@Body() todoInfos: Partial<TodoModel>): TodoModel {
+  addTodo(@Body() todoInfos: AddTodoDto): TodoModel {
     const { name, description } = todoInfos;
     const newTodo = new TodoModel();
     newTodo.id = uuidv4();
