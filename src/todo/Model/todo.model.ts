@@ -5,10 +5,10 @@ export enum TodoStatusEnum {
 }
 export class TodoModel {
   constructor(
-    public id: number = 0,
+    public id: string = '0',
     public name: string = '',
     public description: string = '',
     public date: Date = new Date(),
-    public status: TodoStatusEnum,
+    public status: TodoStatusEnum = TodoStatusEnum.waiting,
   ) {}
 }
