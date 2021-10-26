@@ -1,8 +1,8 @@
-import { Controller, Delete, Get, Patch, Post, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put } from "@nestjs/common";
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { LoggerService } from "../utils/logger/logger.service";
-import { SayHelloService } from "../utils/say-hello/say-hello.service";
+import { LoggerService } from '../utils/logger/logger.service';
+import { SayHelloService } from '../utils/say-hello/say-hello.service';
 
 @Controller('first')
 export class FirstController {
@@ -10,13 +10,12 @@ export class FirstController {
     private loggerService: LoggerService,
     private sayHello: SayHelloService,
   ) {}
-  @Get('')
-  showGet(): string {
+  @Get(':id')
+  showGet(@Param('id', ParseIntPipe) id: number): string {
+    console.log(id);
     this.sayHello.hello();
-    this.loggerService.logger('GET');
     return 'GET';
   }
-
   @Post('')
   showPost(): string {
     console.log('Post');

@@ -3,6 +3,7 @@ import { TodoModel } from './Model/todo.model';
 import { AddTodoDto } from './dto/add-todo.dto';
 
 import { v4 as uuidv4 } from 'uuid';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 
 @Injectable()
 export class TodoService {
@@ -22,7 +23,7 @@ export class TodoService {
   getTodoById(id: string): TodoModel {
     return this.findTodoById(id);
   }
-  updateTodoById(id: string, updateTodoData: Partial<TodoModel>): TodoModel {
+  updateTodoById(id: string, updateTodoData: UpdateTodoDto): TodoModel {
     const todo = this.findTodoById(id);
     const { name, description, status } = updateTodoData;
     todo.name = name ?? todo.name;

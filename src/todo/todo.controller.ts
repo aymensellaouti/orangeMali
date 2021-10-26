@@ -1,15 +1,16 @@
 import {
   Body,
-  Controller,
+  Controller, DefaultValuePipe,
   Delete,
   Get,
   Param,
   Post,
-  Put,
-} from '@nestjs/common';
+  Put
+} from "@nestjs/common";
 import { TodoModel } from './Model/todo.model';
 import { AddTodoDto } from './dto/add-todo.dto';
 import { TodoService } from './todo.service';
+import { UpdateTodoDto } from "./dto/update-todo.dto";
 
 @Controller('todo')
 export class TodoController {
@@ -21,12 +22,13 @@ export class TodoController {
   @Post()
   // @HttpCode(200)
   addTodo(@Body() todoInfos: AddTodoDto): TodoModel {
+    console.log(todoInfos);
     return this.todoService.addTodo(todoInfos);
   }
   @Get('/testParam/:id?/:name?')
   // @HttpCode(200)
-  testParam(@Param() params): any {
-    return params;
+  testParam(@Param('id') id, @Param('name', new DefaultValuePipe('aymen')) name: string): any {
+    return { id, name };
   }
   @Get(':id')
   getTodoById(@Param('id') id: string): TodoModel {
@@ -35,7 +37,7 @@ export class TodoController {
   @Put(':id')
   updateTodoById(
     @Param('id') id: string,
-    @Body() updateTodoData: Partial<TodoModel>,
+    @Body() updateTodoData: UpdateTodoDto,
   ): TodoModel {
     return this.todoService.updateTodoById(id, updateTodoData);
   }
