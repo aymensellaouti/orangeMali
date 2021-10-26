@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { loggerMiddleware } from './middlewares/functions.middlewares';
 import * as morgan from 'morgan';
 import * as helmet from 'helmet';
+import { CustomFilter } from "./filters/custom.filter";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
@@ -19,6 +20,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.useGlobalFilters(new CustomFilter());
   // localhost:3000
   await app.listen(3000);
 }

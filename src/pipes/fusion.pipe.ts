@@ -1,9 +1,9 @@
 import {
   ArgumentMetadata,
-  BadRequestException,
+  BadRequestException, HttpException, HttpStatus,
   Injectable,
-  PipeTransform,
-} from '@nestjs/common';
+  PipeTransform
+} from "@nestjs/common";
 
 @Injectable()
 export class FusionPipe implements PipeTransform {
