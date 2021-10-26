@@ -1,5 +1,6 @@
-import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, MaxLength, MinLength } from "class-validator";
 import { ErrorMessages } from '../Generics/error-messages';
+import { Type } from "class-transformer";
 
 export class AddTodoDto {
   @IsNotEmpty({
@@ -17,4 +18,8 @@ export class AddTodoDto {
   })
   @MinLength(10)
   description: string;
+  // @IsNumber()
+  // @Type(() => Number)
+  // @IsNotEmpty()
+  // age: number;
 }
