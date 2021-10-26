@@ -1,8 +1,9 @@
-import { Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseIntPipe, Patch, Post, Put } from "@nestjs/common";
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LoggerService } from '../utils/logger/logger.service';
 import { SayHelloService } from '../utils/say-hello/say-hello.service';
+import { FusionPipe } from "../pipes/fusion.pipe";
 
 @Controller('first')
 export class FirstController {
@@ -10,6 +11,10 @@ export class FirstController {
     private loggerService: LoggerService,
     private sayHello: SayHelloService,
   ) {}
+  @Get('skills')
+  showSkills(@Body(FusionPipe) skills: string): string {
+    return skills;
+  }
   @Get(':id')
   showGet(@Param('id', ParseIntPipe) id: number): string {
     console.log(id);

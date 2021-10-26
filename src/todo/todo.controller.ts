@@ -11,6 +11,7 @@ import { TodoModel } from './Model/todo.model';
 import { AddTodoDto } from './dto/add-todo.dto';
 import { TodoService } from './todo.service';
 import { UpdateTodoDto } from "./dto/update-todo.dto";
+import { FirstPipePipe } from "../pipes/first-pipe.pipe";
 
 @Controller('todo')
 export class TodoController {
@@ -21,7 +22,7 @@ export class TodoController {
   }
   @Post()
   // @HttpCode(200)
-  addTodo(@Body() todoInfos: AddTodoDto): TodoModel {
+  addTodo(@Body(FirstPipePipe) todoInfos: AddTodoDto): TodoModel {
     console.log(todoInfos);
     return this.todoService.addTodo(todoInfos);
   }
