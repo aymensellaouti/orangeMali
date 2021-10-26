@@ -1,12 +1,19 @@
 import { Controller, Delete, Get, Patch, Post, Put } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { LoggerService } from "../utils/logger/logger.service";
+import { SayHelloService } from "../utils/say-hello/say-hello.service";
 
 @Controller('first')
 export class FirstController {
+  constructor(
+    private loggerService: LoggerService,
+    private sayHello: SayHelloService,
+  ) {}
   @Get('')
   showGet(): string {
-    console.log('GET');
+    this.sayHello.hello();
+    this.loggerService.logger('GET');
     return 'GET';
   }
 
