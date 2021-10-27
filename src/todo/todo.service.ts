@@ -7,6 +7,7 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Repository } from 'typeorm';
 import { TodoEntity } from './entities/todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
 @Injectable()
 export class TodoService {
@@ -70,5 +71,27 @@ export class TodoService {
       throw new NotFoundException('Todo Innexistant');
     }
     return this.todoRepository.save(updatedTodo);
+  }
+
+  async deleteDbTodo(id: number) {
+    const result = await this.todoRepository.delete(id);
+    if (!result.affected) {
+      throw new NotFoundException('Todo Innexistant');
+    }
+    return result;
+  }
+  async softDeleteDbTodo(id: number): Promise<UpdateResult> {
+    const result = await this.todoRepository.softDelete(id);
+    if (!result.affected) {
+      throw new NotFoundException('Erreur');
+    }
+    return result;
+  }
+  async restoreSoftDeletedDbTodo(id: number): Promise<UpdateResult> {
+    const result = await this.todoRepository.restore(id);
+    if (!result.affected) {
+      throw new NotFoundException('Erreur');
+    }
+    return result;
   }
 }
