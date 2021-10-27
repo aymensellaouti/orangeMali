@@ -14,10 +14,19 @@ import { AddTodoDto } from './dto/add-todo.dto';
 import { TodoService } from './todo.service';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { FirstPipePipe } from '../pipes/first-pipe.pipe';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('todo')
 export class TodoController {
-  constructor(private todoService: TodoService) {}
+  constructor(
+    private todoService: TodoService,
+    private configService: ConfigService,
+  ) {
+    console.log(
+      'In TodoController application.port value :',
+      this.configService.get('application.port'),
+    );
+  }
   @Get('')
   @UseFilters()
   getTodos(): TodoModel[] {

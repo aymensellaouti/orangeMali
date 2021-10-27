@@ -8,14 +8,29 @@ import { SayHelloService } from './utils/say-hello/say-hello.service';
 import { FirstMiddleware } from './middlewares/first.middleware';
 import { SecondMiddleware } from './middlewares/second.middleware';
 import { loggerMiddleware } from './middlewares/functions.middlewares';
-
+import { ConfigModule } from '@nestjs/config';
+import devConfiguration from './config/dev.configuration';
+import prodConfiguration from './config/prod.configuration';
 @Module({
-  imports: [FirstModule, SecondModule, TodoModule],
+  imports: [
+    FirstModule,
+    SecondModule,
+    TodoModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [
+        process.env.NODE_ENV === 'development'
+          ? devConfiguration
+          : prodConfiguration,
+      ],
+    }),
+  ],
   controllers: [AppController],
   providers: [LoggerService, SayHelloService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
+    console.log('ENV', process.env.NODE_ENV);
     consumer.apply(FirstMiddleware).forRoutes('todo');
     consumer.apply(SecondMiddleware).forRoutes('');
   }
