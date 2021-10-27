@@ -5,6 +5,9 @@ import { loggerMiddleware } from './middlewares/functions.middlewares';
 import * as morgan from 'morgan';
 import * as helmet from 'helmet';
 import { CustomFilter } from "./filters/custom.filter";
+import { FirstInterceptor } from "./interceptors/first.interceptor";
+import { RequestDurationInterceptor } from "./interceptors/request-duration.interceptor";
+import { MapResponseDataInterceptor } from "./interceptors/map-response-data.interceptor";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
@@ -21,6 +24,8 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new CustomFilter());
+  app.useGlobalInterceptors(new RequestDurationInterceptor());
+  // app.useGlobalInterceptors(new MapResponseDataInterceptor());
   // localhost:3000
   await app.listen(3000);
 }

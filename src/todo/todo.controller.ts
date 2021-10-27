@@ -1,22 +1,25 @@
 import {
   Body,
-  Controller, DefaultValuePipe,
+  Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
   Post,
-  Put
-} from "@nestjs/common";
+  Put,
+  UseFilters,
+} from '@nestjs/common';
 import { TodoModel } from './Model/todo.model';
 import { AddTodoDto } from './dto/add-todo.dto';
 import { TodoService } from './todo.service';
-import { UpdateTodoDto } from "./dto/update-todo.dto";
-import { FirstPipePipe } from "../pipes/first-pipe.pipe";
+import { UpdateTodoDto } from './dto/update-todo.dto';
+import { FirstPipePipe } from '../pipes/first-pipe.pipe';
 
 @Controller('todo')
 export class TodoController {
   constructor(private todoService: TodoService) {}
   @Get('')
+  @UseFilters()
   getTodos(): TodoModel[] {
     return this.todoService.getTodos();
   }
@@ -28,7 +31,10 @@ export class TodoController {
   }
   @Get('/testParam/:id?/:name?')
   // @HttpCode(200)
-  testParam(@Param('id') id, @Param('name', new DefaultValuePipe('aymen')) name: string): any {
+  testParam(
+    @Param('id') id,
+    @Param('name', new DefaultValuePipe('aymen')) name: string,
+  ): any {
     return { id, name };
   }
   @Get(':id')
