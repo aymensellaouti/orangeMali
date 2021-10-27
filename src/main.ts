@@ -1,16 +1,17 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
-import { loggerMiddleware } from './middlewares/functions.middlewares';
-import * as morgan from 'morgan';
-import * as helmet from 'helmet';
-import * as dotenv from 'dotenv';
-import { CustomFilter } from './filters/custom.filter';
-import { FirstInterceptor } from './interceptors/first.interceptor';
-import { RequestDurationInterceptor } from './interceptors/request-duration.interceptor';
-import { MapResponseDataInterceptor } from './interceptors/map-response-data.interceptor';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { ValidationPipe, VersioningType } from "@nestjs/common";
+import { loggerMiddleware } from "./middlewares/functions.middlewares";
+import * as morgan from "morgan";
+import * as dotenv from "dotenv";
+import { CustomFilter } from "./filters/custom.filter";
+import { RequestDurationInterceptor } from "./interceptors/request-duration.interceptor";
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
   app.enableCors({
     origin: 'http://localhost:4200',
   });

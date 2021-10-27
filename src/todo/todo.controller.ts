@@ -16,7 +16,10 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { FirstPipePipe } from '../pipes/first-pipe.pipe';
 import { ConfigService } from '@nestjs/config';
 
-@Controller('todo')
+@Controller({
+  path: 'todo',
+  version: '1',
+})
 export class TodoController {
   constructor(
     private todoService: TodoService,
@@ -28,7 +31,6 @@ export class TodoController {
     );
   }
   @Get('')
-  @UseFilters()
   getTodos(): TodoModel[] {
     return this.todoService.getTodos();
   }

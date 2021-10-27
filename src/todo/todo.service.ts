@@ -54,4 +54,11 @@ export class TodoService {
     }
     return todo;
   }
+
+  // getDbTodos(): Promise<TodoModel[]> {
+  //   return [];
+  // }
+  addDbTodo(todoInfos: AddTodoDto): Promise<TodoEntity> {
+    return this.todoRepository.save(todoInfos);
+  }
 }
