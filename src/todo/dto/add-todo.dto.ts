@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber, MaxLength, MinLength } from "class-validator";
-import { ErrorMessages } from '../Generics/error-messages';
+import { ErrorMessages } from '../../Generics/error-messages';
 import { Type } from "class-transformer";
 
 export class AddTodoDto {

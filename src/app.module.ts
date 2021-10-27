@@ -11,6 +11,8 @@ import { loggerMiddleware } from './middlewares/functions.middlewares';
 import { ConfigModule } from '@nestjs/config';
 import devConfiguration from './config/dev.configuration';
 import prodConfiguration from './config/prod.configuration';
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { TodoEntity } from "./todo/entities/todo.entity";
 @Module({
   imports: [
     FirstModule,
@@ -23,6 +25,17 @@ import prodConfiguration from './config/prod.configuration';
           ? devConfiguration
           : prodConfiguration,
       ],
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '',
+      database: 'orange-mali',
+      autoLoadEntities: true,
+      synchronize: true,
+      debug: true,
     }),
   ],
   controllers: [AppController],

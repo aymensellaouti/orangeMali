@@ -4,9 +4,16 @@ import { AddTodoDto } from './dto/add-todo.dto';
 
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { Repository } from "typeorm";
+import { TodoEntity } from "./entities/todo.entity";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class TodoService {
+  constructor(
+    @InjectRepository(TodoEntity)
+    private readonly todoRepository: Repository<TodoEntity>,
+  ) {}
   private todos: TodoModel[] = [];
   getTodos(): TodoModel[] {
     return this.todos;
