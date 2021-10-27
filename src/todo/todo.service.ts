@@ -4,9 +4,9 @@ import { AddTodoDto } from './dto/add-todo.dto';
 
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateTodoDto } from './dto/update-todo.dto';
-import { Repository } from "typeorm";
-import { TodoEntity } from "./entities/todo.entity";
-import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from 'typeorm';
+import { TodoEntity } from './entities/todo.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TodoService {
@@ -60,5 +60,15 @@ export class TodoService {
   // }
   addDbTodo(todoInfos: AddTodoDto): Promise<TodoEntity> {
     return this.todoRepository.save(todoInfos);
+  }
+  async updateDbTodoById(id: number, updateTodoData: UpdateTodoDto) {
+    const updatedTodo = await this.todoRepository.preload({
+      id,
+      ...updateTodoData,
+    });
+    if (!updatedTodo) {
+      throw new NotFoundException('Todo Innexistant');
+    }
+    return this.todoRepository.save(updatedTodo);
   }
 }
