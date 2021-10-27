@@ -94,4 +94,9 @@ export class TodoService {
     }
     return result;
   }
+  findAllTodoDb(): Promise<TodoEntity[]> {
+    return this.todoRepository.find({
+      // select: ['id', 'name'],
+    });
+  }
 }

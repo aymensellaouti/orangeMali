@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Put, Query } from "@nestjs/common";
 import { TodoModel } from '../Model/todo.model';
 import { TodoService } from '../todo.service';
 import { ConfigService } from '@nestjs/config';
@@ -16,9 +16,9 @@ import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
 export class TodoDbController {
   constructor(private todoService: TodoService) {}
   @Get('')
-  getTodos(): any {
-    return 'get todo v2';
-    // return this.todoService.getDbTodos();
+  getTodos(@Query() searchCritrias): Promise<TodoEntity[]> {
+    console.log('sc :', searchCritrias);
+    return this.todoService.findAllTodoDb();
   }
   @Post()
   // @HttpCode(200)
