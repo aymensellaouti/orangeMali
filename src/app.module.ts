@@ -35,7 +35,7 @@ import { TodoEntity } from "./todo/entities/todo.entity";
       database: 'orange-mali',
       autoLoadEntities: true,
       synchronize: true,
-      debug: true,
+      logging: true,
     }),
   ],
   controllers: [AppController],

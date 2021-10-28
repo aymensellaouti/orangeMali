@@ -8,6 +8,8 @@ import { TodoEntity } from '../entities/todo.entity';
 import { UpdateTodoDto } from "../dto/update-todo.dto";
 import { DeleteResult } from "typeorm";
 import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
+import { SearchTodoDto } from "../dto/search-todo.dto";
+import { DateIntervalDto } from "../../Generics/dto/date-interval.dto";
 
 @Controller({
   path: 'todo',
@@ -16,9 +18,16 @@ import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
 export class TodoDbController {
   constructor(private todoService: TodoService) {}
   @Get('')
-  getTodos(@Query() searchCritrias): Promise<TodoEntity[]> {
-    console.log('sc :', searchCritrias);
-    return this.todoService.findAllTodoDb();
+  getTodos(@Query() searchCritrias: SearchTodoDto): Promise<TodoEntity[]> {
+    return this.todoService.findQBAllTodoDb(searchCritrias);
+  }
+  @Get('stats')
+  getStatsTodos(@Query() dateIntervalDto: DateIntervalDto): Promise<any[]> {
+    return this.todoService.getStatsTodosStatus(dateIntervalDto);
+  }
+  @Get(':id')
+  getTodoById(@Param('id') id: number): Promise<TodoEntity> {
+    return this.todoService.findTodoByIdDb(id);
   }
   @Post()
   // @HttpCode(200)

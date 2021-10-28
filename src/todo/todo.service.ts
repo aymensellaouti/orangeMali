@@ -4,10 +4,14 @@ import { AddTodoDto } from './dto/add-todo.dto';
 
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateTodoDto } from './dto/update-todo.dto';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { TodoEntity } from './entities/todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import { SearchTodoDto } from './dto/search-todo.dto';
+import { paginateQbFunction } from '../Generics/qb functions/paginate.qb.function';
+import { DateIntervalDto } from '../Generics/dto/date-interval.dto';
+import { setDateInterval } from '../Generics/qb functions/date-intervale.qb.function';
 
 @Injectable()
 export class TodoService {
@@ -94,9 +98,54 @@ export class TodoService {
     }
     return result;
   }
-  findAllTodoDb(): Promise<TodoEntity[]> {
+  findAllTodoDb(searchCritrias: SearchTodoDto): Promise<TodoEntity[]> {
+    const criterias = [];
+    if (searchCritrias.criteria) {
+      criterias.push({ name: Like(`%${searchCritrias.criteria}%`) });
+      criterias.push({ description: Like(`%${searchCritrias.criteria}%`) });
+    }
+    if (searchCritrias.status) {
+      criterias.push({ status: searchCritrias.status });
+    }
     return this.todoRepository.find({
-      // select: ['id', 'name'],
+      where: criterias,
     });
+  }
+  findQBAllTodoDb(searchCritrias: SearchTodoDto): Promise<TodoEntity[]> {
+    const { criteria, status, pageNumber, pageSize } = searchCritrias;
+    const qb = this.todoRepository.createQueryBuilder('t');
+    if (criteria) {
+      qb.andWhere(
+        `(
+         (t.name like :criteria) or
+         (t.description like :criteria) 
+        )`,
+        { criteria: `%${criteria}%` },
+      );
+    }
+
+    if (status) {
+      qb.andWhere('t.status = :status', { status });
+    }
+    if (pageSize) {
+      paginateQbFunction(qb, pageSize, pageNumber);
+    }
+
+    return qb.getMany();
+  }
+  async findTodoByIdDb(id: number): Promise<TodoEntity> {
+    const todo = await this.todoRepository.findOne(id);
+    console.log(todo);
+    if (!todo) {
+      throw new NotFoundException('Todo Inexistant');
+    }
+    return todo;
+  }
+  getStatsTodosStatus(dateIntervalDto: DateIntervalDto): Promise<any> {
+    const qb = this.todoRepository.createQueryBuilder('t');
+    const { startDate, endDate } = dateIntervalDto;
+    qb.select('status, count(status) as todo_number').groupBy('status');
+    setDateInterval(qb, startDate, endDate, 'created_at');
+    return qb.getRawMany();
   }
 }
