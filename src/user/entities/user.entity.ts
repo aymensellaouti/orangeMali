@@ -1,6 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Cv } from '../../cv/entities/cv.entity';
+import { TimestampEntity } from "../../Generics/timestamp.entity";
 @Entity('user')
-export class User {
+export class User extends TimestampEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
@@ -9,4 +11,6 @@ export class User {
   email: string;
   @Column()
   password: string;
+  @OneToMany((TargetEntity) => Cv, (cv) => cv.user, {})
+  cvs: Cv[];
 }
