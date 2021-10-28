@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseGuards,
   Req,
+  SetMetadata,
 } from '@nestjs/common';
 import { CvService } from './cv.service';
 import { CreateCvDto } from './dto/create-cv.dto';
@@ -17,16 +18,20 @@ import { UpdateCvDto } from './dto/update-cv.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editfileName } from '../Generics/upload-file.utils';
-import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { RoleGaurd } from '../auth/guards/role.gaurd';
+import { Roles } from '../auth/decorators/role.decorator';
 
 @Controller('cv')
+@Roles('role', 'admin')
 export class CvController {
   constructor(private readonly cvService: CvService) {}
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @Roles('role', 'user')
+  @UseGuards(AuthGuard('jwt'), RoleGaurd)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
